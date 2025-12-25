@@ -69,34 +69,6 @@
 
 <body>
     <div class="app-container">
-        <!-- AI Assistant -->
-        function askAI(context) {
-        let prompt = "";
-        const lang = document.documentElement.lang || 'hr';
-
-        const prompts = {
-        hr: {
-        general: "Zdravo BornAI! Želim naučiti više o SudReg API-ju. Možeš li mi pomoći?",
-        beginner_concepts: "Pojasni mi osnovne koncepte API-ja (HTTP, JSON, Endpoint) na jednostavan način.",
-        auth_help: "Trebam pomoć oko OAuth2 autentifikacije za SudReg API. Kako to funkcionira?",
-        endpoints: "Možeš li mi objasniti različite krajnje točke (endpoints) SudReg API-ja i što koja radi?"
-        },
-        en: {
-        general: "Hello BornAI! I want to learn more about the SudReg API. Can you help me?",
-        beginner_concepts: "Explain the basic API concepts (HTTP, JSON, Endpoint) to me in a simple way.",
-        auth_help: "I need help with OAuth2 authentication for the SudReg API. How does it work?",
-        endpoints: "Can you explain the different SudReg API endpoints and what each one does?"
-        }
-        };
-
-        prompt = prompts[lang][context] || prompts[lang].general;
-
-        // Using the current structure for agent chat
-        const bornAIUrl = `https://bornai.com.hr/?q=${encodeURIComponent(prompt)}`;
-        window.open(bornAIUrl, '_blank');
-        }
-
-        <!-- Initialization -->
         <!-- Navigation -->
         <nav class="navbar">
             <div class="nav-container">
