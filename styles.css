@@ -108,7 +108,44 @@ body {
 .nav-controls {
     display: flex;
     align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.nav-links {
+    display: flex;
     gap: var(--spacing-md);
+    margin-left: var(--spacing-xl);
+    flex: 1;
+}
+
+.nav-link-ext {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-link-ext:hover {
+    color: var(--accent-text);
+}
+
+.github-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    color: var(--text-primary);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+    background: var(--bg-card);
+}
+
+.github-btn:hover {
+    background: var(--nav-hover);
+    border-color: var(--text-secondary);
+    transform: translateY(-1px);
 }
 
 /* Theme Toggle */
@@ -146,7 +183,12 @@ body {
     overflow-y: auto;
     padding: var(--spacing-lg) var(--spacing-md);
     z-index: 900;
-    transition: transform 0.3s ease;
+    z-index: 900;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.active {
+    transform: translateX(0);
 }
 
 .sidebar-nav ul {
@@ -191,7 +233,7 @@ body {
 .content-container {
     max-width: 860px;
     margin: 0 auto;
-    padding: 0 var(--spacing-xl);
+    padding: 0 var(--spacing-lg);
 }
 
 /* Sections */
@@ -236,6 +278,42 @@ p {
 .hero .subtitle {
     font-size: 1.2rem;
     color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.hero-btn.github {
+    background: var(--text-primary);
+    color: var(--bg-page);
+    border: 1px solid var(--text-primary);
+}
+
+.hero-btn.github:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    filter: brightness(0.9);
+}
+
+[data-theme="light"] .hero-btn.github {
+    background: #24292f;
+    color: white;
 }
 
 /* Code Blocks */
@@ -472,15 +550,94 @@ code {
     font-size: 1.2rem;
 }
 
-@media (max-width: 768px) {
-    .ai-ask-btn.floating .btn-text {
-        display: none;
+/* Sidebar Extra Sections */
+.sidebar-divider {
+    height: 1px;
+    background: var(--border);
+    margin: var(--spacing-lg) 0;
+}
+
+.sidebar-extra {
+    padding: 0 12px;
+}
+
+.sidebar-extra h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.sidebar-extra ul {
+    list-style: none;
+}
+
+.sidebar-extra li {
+    margin-bottom: 8px;
+}
+
+.sidebar-extra a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.sidebar-extra a:hover {
+    color: var(--accent-text);
+}
+
+/* Updated Responsiveness */
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
     }
 
-    .ai-ask-btn.floating {
-        padding: 12px;
-        bottom: 20px;
-        right: 20px;
+    .main-content {
+        margin-left: 0;
+    }
+
+    .nav-links {
+        display: none;
+    }
+}
+
+@media (min-width: 1025px) {
+    .mobile-toggle {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero .subtitle {
+        font-size: 1rem;
+    }
+
+    .nav-brand h1 {
+        font-size: 1.1rem;
+    }
+
+    .section {
+        margin-bottom: var(--spacing-lg);
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-controls {
+        gap: var(--spacing-xs);
+    }
+
+    .github-btn {
+        padding: 6px;
     }
 }
 
