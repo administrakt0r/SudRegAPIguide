@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="hr" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>SudReg API Dokumentacija | Vodič za API Sudskog registra Hrvatske</title>
+    <meta name="description"
+        content="Kompletan vodič za integraciju API-ja Sudskog registra Hrvatske. Saznajte kako dohvatiti podatke o tvrtkama, autentificirati se i implementirati u Next.js, PHP, Angular i Node.js.">
+    <meta name="keywords"
+        content="SudReg API, Sudski registar, Hrvatska podaci o tvrtkama, OIB pretraga, MBS pretraga, API integracija, Next.js, PHP, Angular">
+    <meta name="author" content="BornAI">
+    <link rel="canonical" href="https://sudregapi.bornai.app/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sudregapi.bornai.app/">
+    <meta property="og:title" content="SudReg API Dokumentacija | API Sudskog registra Hrvatske">
+    <meta property="og:description"
+        content="Kompletan vodič za integraciju API-ja Sudskog registra s primjerima u više frameworka.">
+    <meta property="og:image" content="https://sudregapi.bornai.app/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sudregapi.bornai.app/">
+    <meta property="twitter:title" content="SudReg API Dokumentacija">
+    <meta property="twitter:description" content="Kompletan vodič za integraciju API-ja Sudskog registra Hrvatske">
+    <meta property="twitter:image" content="https://sudregapi.bornai.app/og-image.png">
+
+    <!-- Language Alternates -->
+    <link rel="alternate" hreflang="en" href="https://sudregapi.bornai.app/?lang=en">
+    <link rel="alternate" hreflang="hr" href="https://sudregapi.bornai.app/?lang=hr">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Prism.js for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"
+        id="prism-theme">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "SudReg API Integration Guide",
+      "description": "Complete guide for integrating the Croatian Court Registry API",
+      "author": {
+        "@type": "Organization",
+        "name": "BornAI"
+      },
+      "datePublished": "2025-12-25",
+      "dateModified": "2025-12-25"
+    }
+    </script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- AI Assistant -->
+        function askAI(context) {
+        let prompt = "";
+        const lang = document.documentElement.lang || 'hr';
+
+        const prompts = {
+        hr: {
+        general: "Zdravo BornAI! Želim naučiti više o SudReg API-ju. Možeš li mi pomoći?",
+        beginner_concepts: "Pojasni mi osnovne koncepte API-ja (HTTP, JSON, Endpoint) na jednostavan način.",
+        auth_help: "Trebam pomoć oko OAuth2 autentifikacije za SudReg API. Kako to funkcionira?",
+        endpoints: "Možeš li mi objasniti različite krajnje točke (endpoints) SudReg API-ja i što koja radi?"
+        },
+        en: {
+        general: "Hello BornAI! I want to learn more about the SudReg API. Can you help me?",
+        beginner_concepts: "Explain the basic API concepts (HTTP, JSON, Endpoint) to me in a simple way.",
+        auth_help: "I need help with OAuth2 authentication for the SudReg API. How does it work?",
+        endpoints: "Can you explain the different SudReg API endpoints and what each one does?"
+        }
+        };
+
+        prompt = prompts[lang][context] || prompts[lang].general;
+
+        // Using the current structure for agent chat
+        const bornAIUrl = `https://bornai.com.hr/?q=${encodeURIComponent(prompt)}`;
+        window.open(bornAIUrl, '_blank');
+        }
+
+        <!-- Initialization -->
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <h1>SUDREG API</h1>
+                </div>
+                <div class="nav-controls">
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" style="display:none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.95 16.95l.707.707M7.05 7.05l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                        </svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                    <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="lang-switcher-inline">
+                <button onclick="switchLanguage('hr')" id="lang-hr-btn" class="active">HRVATSKI</button>
+                <button onclick="switchLanguage('en')" id="lang-en-btn">ENGLISH</button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sidebarNav">
+                    <li><a href="#beginner-guide"><span data-hr="Za početnike" data-en="Beginners Guide">Za
+                                početnike</span></a></li>
+                    <li><a href="#overview" class="active"><span data-hr="Pregled" data-en="Overview">Pregled</span></a>
+                    </li>
+                    <li><a href="#authentication"><span data-hr="Autentifikacija"
+                                data-en="Authentication">Autentifikacija</span></a></li>
+                    <li><a href="#methods"><span data-hr="API Metode" data-en="API Methods">API Metode</span></a></li>
+                    <li><a href="#examples"><span data-hr="Primjeri" data-en="Examples">Primjeri</span></a></li>
+                    <li><a href="#best-practices"><span data-hr="Najbolje prakse" data-en="Best Practices">Najbolje
+                                prakse</span></a></li>
+                    <li><a href="#resources"><span data-hr="Resursi" data-en="Resources">Resursi</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-container">
+                <!-- Hero Section -->
+                <header class="hero">
+                    <div data-lang="en" style="display:none;">
+                        <h1>SudReg API Documentation</h1>
+                        <p class="subtitle">Complete technical guide for Croatian company registry data access</p>
+                    </div>
+                    <div data-lang="hr">
+                        <h1>SudReg API Dokumentacija</h1>
+                        <p class="subtitle">Tehnički vodič za pristup podacima Sudskog registra Hrvatske</p>
+                    </div>
+                </header>
+
+                <!-- Ask AI Floating Button (Mobile) -->
+                <button class="ai-ask-btn floating" onclick="askAI('general')" aria-label="Ask BornAI">
+                    <span class="ai-sparkle">✨</span>
+                    <span class="btn-text">Pitaj BornAI</span>
+                </button>
+
+                <!-- Beginner Guide Section -->
+                <section id="beginner-guide" class="section">
+                    <div data-lang="en" style="display:none;">
+                        <h2>Getting Started (For Beginners)</h2>
+                        <div class="ai-card">
+                            <div class="ai-header">
+                                <span class="ai-icon">✨</span>
+                                <h3>New to APIs?</h3>
+                                <button class="ai-action-btn" onclick="askAI('beginner_concepts')">Ask BornAI about
+                                    APIs</button>
+                            </div>
+                            <p>An API (Application Programming Interface) is like a digital waiter. You "order" data
+                                (like company info), and the API "fetches" it from the database for you.</p>
+                        </div>
+                        <h3>Key Concepts</h3>
+                        <ul>
+                            <li><strong>HTTP:</strong> The language of the web. We use <code>GET</code> to read data and
+                                <code>POST</code> to send/receive secure info.
+                            </li>
+                            <li><strong>JSON:</strong> The format of the data. It looks like a simple list of key-value
+                                pairs.</li>
+                            <li><strong>Endpoint:</strong> A specific web address that returns specific data.</li>
+                        </ul>
+                    </div>
+                    <div data-lang="hr">
+                        <h2>Početni koraci (Za početnike)</h2>
+                        <div class="ai-card">
+                            <div class="ai-header">
+                                <span class="ai-icon">✨</span>
+                                <h3>Prvi put koristite API?</h3>
+                                <button class="ai-action-btn" onclick="askAI('beginner_concepts')">Pitaj BornAI o
+                                    API-ju</button>
+                            </div>
+                            <p>API (Application Programming Interface) je poput digitalnog konobara. Vi "naručite"
+                                podatke (npr. info o tvrtki), a API ih "donese" iz baze podataka za vas.</p>
+                        </div>
+                        <h3>Osnovni pojmovi</h3>
+                        <ul>
+                            <li><strong>HTTP:</strong> Jezik weba. Koristimo <code>GET</code> za čitanje podataka i
+                                <code>POST</code> za slanje sigurnih informacija.
+                            </li>
+                            <li><strong>JSON:</strong> Format podataka. Izgleda kao jednostavna lista ključ-vrijednost
+                                parova.</li>
+                            <li><strong>Endpoint (Krajnja točka):</strong> Specifična web adresa koja vraća točno
+                                određene podatke.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Overview Section -->
+                <section id="overview" class="section">
+                    <div data-lang="en" style="display:none;">
+                        <h2>Overview</h2>
+                        <p>The <strong>SudReg API</strong> provides high-performance access to the official Croatian
+                            Court Registry database. This guide covers everything from authentication to
+                            production-ready implementation examples.</p>
+                        <div class="card">
+                            <h3>Data Coverage</h3>
+                            <ul>
+                                <li>Legal entity identifiers (OIB, MBS)</li>
+                                <li>Registered addresses and contact info</li>
+                                <li>Primary and secondary activities (NKD)</li>
+                                <li>Registration timeline and status history</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div data-lang="hr">
+                        <h2>Pregled</h2>
+                        <p><strong>SudReg API</strong> omogućuje brz i pouzdan pristup podacima iz službenog Sudskog
+                            registra Hrvatske. Ovaj vodič pokriva sve od autentifikacije do primjera implementacije
+                            spremnih za produkciju.</p>
+                        <div class="card">
+                            <h3>Obuhvat podataka</h3>
+                            <ul>
+                                <li>Identifikatori pravnih osoba (OIB, MBS)</li>
+                                <li>Adrese sjedišta i kontakt podaci</li>
+                                <li>Djelatnosti po NKD klasifikaciji</li>
+                                <li>Povijest upisa i statusi subjekata</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Authentication Section -->
+                <section id="authentication" class="section">
+                    <div data-lang="en" style="display:none;">
+                        <h2>Authentication</h2>
+                        <div class="ai-header-inline">
+                            <p>The API uses <strong>OAuth2 Client Credentials Flow</strong>. Secure your credentials and
+                                never expose them in client-side code.</p>
+                            <button class="ai-compact-btn" onclick="askAI('auth_help')">✨ Auth Help</button>
+                        </div>
+
+                        <h3>1. Obtain Credentials</h3>
+                        <p>Register at <a href="https://sudreg-data.gov.hr" target="_blank"
+                                rel="noopener">sudreg-data.gov.hr</a> to receive your <code>CLIENT_ID</code> and
+                            <code>CLIENT_SECRET</code>.
+                        </p>
+
+                        <h3>2. Exchange for Access Token</h3>
+                    </div>
+                    <div data-lang="hr">
+                        <h2>Autentifikacija</h2>
+                        <div class="ai-header-inline">
+                            <p>API koristi <strong>OAuth2 Client Credentials Flow</strong>. Osigurajte svoje pristupne
+                                podatke i nikada ih ne izlažite u klijentskom kodu.</p>
+                            <button class="ai-compact-btn" onclick="askAI('auth_help')">✨ Pomoć oko prijave</button>
+                        </div>
+
+                        <h3>1. Dobivanje vjerodajnica</h3>
+                        <p>Registrirajte se na <a href="https://sudreg-data.gov.hr" target="_blank"
+                                rel="noopener">sudreg-data.gov.hr</a> kako biste dobili svoj <code>CLIENT_ID</code> i
+                            <code>CLIENT_SECRET</code>.
+                        </p>
+
+                        <h3>2. Razmjena za Access Token</h3>
+                    </div>
+
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-http">POST https://sudreg-data.gov.hr/api/oauth/token
+Authorization: Basic base64(CLIENT_ID:CLIENT_SECRET)
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials</code></pre>
+                    </div>
+
+                    <div class="warning-box">
+                        <span data-lang="en" style="display:none;"><strong>Important:</strong> Tokens expire after 6
+                            hours. Implement a caching layer to reuse tokens until they expire.</span>
+                        <span data-lang="hr"><strong>Važno:</strong> Tokeni istječu nakon 6 sati. Implementirajte
+                            predmemoriju (cache) kako biste ponovno koristili tokene dok ne isteknu.</span>
+                    </div>
+                </section>
+
+                <!-- API Methods Section -->
+                <section id="methods" class="section">
+                    <div class="section-title-ai">
+                        <h2 data-lang="en" style="display:none;">API Methods</h2>
+                        <h2 data-lang="hr">API Metode</h2>
+                        <button class="ai-action-btn small" onclick="askAI('endpoints')">Pitaj o metodama</button>
+                    </div>
+
+                    <div class="method-card">
+                        <div data-lang="en" style="display:none;">
+                            <h3>1. Get Subject Details by OIB</h3>
+                            <p><strong>Endpoint:</strong> <code>GET /detalji_subjekta?oib={OIB}</code></p>
+                            <p>Fetches full data about a company using its 11-digit OIB.</p>
+                        </div>
+                        <div data-lang="hr">
+                            <h3>1. Dohvat detalja subjekta po OIB-u</h3>
+                            <p><strong>Krajnja točka:</strong> <code>GET /detalji_subjekta?oib={OIB}</code></p>
+                            <p>Dohvaća potpune podatke o tvrtki koristeći njezin 11-znamenkasti OIB.</p>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre><code class="language-http">GET /detalji_subjekta?oib=12345678901
+Authorization: Bearer {access_token}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <div data-lang="en" style="display:none;">
+                            <h3>2. Search by MBS</h3>
+                            <p><strong>Endpoint:</strong> <code>GET /detalji_subjekta?mbs={MBS}</code></p>
+                            <p>Search using the Court Registry Number (MBS).</p>
+                        </div>
+                        <div data-lang="hr">
+                            <h3>2. Pretraga po MBS-u</h3>
+                            <p><strong>Krajnja točka:</strong> <code>GET /detalji_subjekta?mbs={MBS}</code></p>
+                            <p>Pretraga koristeći Matični broj subjekta (MBS).</p>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre><code class="language-http">GET /detalji_subjekta?mbs=080123456
+Authorization: Bearer {access_token}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <div data-lang="en" style="display:none;">
+                            <h3>3. Ukupan broj subjekata</h3>
+                            <p><strong>Endpoint:</strong> <code>GET /broj_subjekata</code></p>
+                            <p>Returns the total number of companies in the registry.</p>
+                        </div>
+                        <div data-lang="hr">
+                            <h3>3. Ukupan broj subjekata</h3>
+                            <p><strong>Krajnja točka:</strong> <code>GET /broj_subjekata</code></p>
+                            <p>Vraća ukupan broj tvrtki u registru.</p>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre><code class="language-http">GET /broj_subjekata
+Authorization: Bearer {access_token}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <div data-lang="en" style="display:none;">
+                            <h3>4. Get Latest Snapshot</h3>
+                            <p><strong>Endpoint:</strong> <code>GET /zadnji_snapshot</code></p>
+                            <p>Get information about the most recent data export.</p>
+                        </div>
+                        <div data-lang="hr">
+                            <h3>4. Zadnji snapshot</h3>
+                            <p><strong>Krajnja točka:</strong> <code>GET /zadnji_snapshot</code></p>
+                            <p>Dohvatite informacije o najnovijem izvozu podataka.</p>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre><code class="language-http">GET /zadnji_snapshot
+Authorization: Bearer {access_token}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Examples Section -->
+                <section id="examples" class="section">
+                    <h2 data-lang="en" style="display:none;">Implementation Examples</h2>
+                    <h2 data-lang="hr">Primjeri implementacije</h2>
+
+                    <div class="framework-tabs">
+                        <button class="tab-btn active" onclick="showFramework('nextjs')">Next.js</button>
+                        <button class="tab-btn" onclick="showFramework('php')">PHP</button>
+                        <button class="tab-btn" onclick="showFramework('nodejs')">Node.js</button>
+                        <button class="tab-btn" onclick="showFramework('angular')">Angular</button>
+                    </div>
+
+                    <div id="nextjs" class="framework-content active">
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre><code class="language-typescript">// lib/sudreg.ts
+export class SudregClient {
+  private async getToken() {
+    const creds = btoa(`${process.env.SUDREG_ID}:${process.env.SUDREG_SECRET}`);
+    const res = await fetch('https://sudreg-data.gov.hr/api/oauth/token', {
+      method: 'POST',
+      headers: { 'Authorization': `Basic ${creds}` },
+      body: 'grant_type=client_credentials'
+    });
+    return res.json();
+  }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="php" class="framework-content">
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre><code class="language-php">&lt;?php
+$ch = curl_init("https://sudreg-data.gov.hr/api/oauth/token");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Basic ' . base64_encode($id . ":" . $secret)
+]);
+$token = json_decode(curl_exec($ch))->access_token;</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="nodejs" class="framework-content">
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre><code class="language-javascript">const axios = require('axios');
+
+async function getCompany(oib) {
+  const tokenRes = await axios.post(tokenUrl, 'grant_type=client_credentials', {
+    headers: { Authorization: `Basic ${base64Creds}` }
+  });
+  
+  return axios.get(`${baseUrl}/detalji_subjekta?oib=${oib}`, {
+    headers: { Authorization: `Bearer ${tokenRes.data.access_token}` }
+  });
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="angular" class="framework-content">
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <pre><code class="language-typescript">@Injectable()
+export class SudregService {
+  constructor(private http: HttpClient) {}
+
+  getSubject(oib: string) {
+    return this.http.get(`${this.apiUrl}/detalji_subjekta`, {
+      params: { oib }
+    });
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Best Practices Section -->
+                <section id="best-practices" class="section">
+                    <h2 data-lang="en" style="display:none;">Best Practices</h2>
+                    <h2 data-lang="hr">Najbolje prakse</h2>
+
+                    <div class="practice-card">
+                        <h3 data-lang="en" style="display:none;">Rate Limiting & Caching</h3>
+                        <h3 data-lang="hr">Ograničenje broja zahtjeva i Cache</h3>
+                        <p data-lang="en" style="display:none;">Implement exponential backoff for retries and cache
+                            subject data for at least 24 hours to reduce load on the government server.</p>
+                        <p data-lang="hr">Implementirajte 'exponential backoff' za ponovne pokušaje i predmemorirajte
+                            podatke o subjektima na barem 24 sata kako biste smanjili opterećenje državnog poslužitelja.
+                        </p>
+                    </div>
+
+                    <div class="practice-card">
+                        <h3 data-lang="en" style="display:none;">Error Handling</h3>
+                        <h3 data-lang="hr">Rukovanje greškama</h3>
+                        <p data-lang="en" style="display:none;">Always check for 404 (subject not found) and 401 (token
+                            expired) responses as part of your core integration logic.</p>
+                        <p data-lang="hr">Uvijek provjeravajte 404 (subjekt nije pronađen) i 401 (token istekao)
+                            odgovore kao dio vaše osnovne logike integracije.</p>
+                    </div>
+                </section>
+
+                <!-- Resources Section -->
+                <section id="resources" class="section">
+                    <h2 data-lang="en" style="display:none;">Additional Resources</h2>
+                    <h2 data-lang="hr">Dodatni resursi</h2>
+                    <ul class="resource-list">
+                        <li><a href="https://sudreg-data.gov.hr" target="_blank" rel="noopener">Official API
+                                Documentation</a></li>
+                        <li><a href="https://sudreg.pravosudje.hr" target="_blank" rel="noopener">Public Web
+                                Interface</a></li>
+                    </ul>
+                </section>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="content-container">
+                    <p data-lang="en" style="display:none;">&copy; 2025 BornAI. Built with precision for Croatian
+                        developers.</p>
+                    <p data-lang="hr">&copy; 2025 BornAI. Izrađeno s preciznošću za hrvatske developere.</p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-http.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
