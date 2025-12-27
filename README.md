@@ -140,10 +140,11 @@ $token = json_decode(curl_exec($ch))->access_token;
 ## Dodatni resursi
 
 - [BornAI.app](https://www.bornAI.app) - AI rješenja za poslovanje
-- [LLM.com.hr](https://www.LLM.com.hr) - AI resursi i vijesti
+- [UmjetnAI.com](https://www.umjetnai.com) - AI vijesti i novosti
+- [LLM.com.hr](https://www.LLM.com.hr) - Besplatni AI API endpoint
 - [GitHub Repo](https://github.com/administrakt0r/SudRegAPIguide) - Izvorni kod ovog vodiča
 
 ---
 
-**Zadnje ažuriranje:** 25. prosinca 2024.
+**Zadnje ažuriranje:** 27. prosinca 2024.
 **Licenca:** MIT
